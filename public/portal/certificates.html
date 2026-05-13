@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Badges & Certificates · NetAcademy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<section class="page">
+  <div class="page-head">
+    <div>
+      <div class="crumbs"><a href="dashboard.html">Home</a><span>/</span> Badges & Certificates</div>
+      <h1 class="page-title">Badges & Certificates</h1>
+      <p class="page-sub">Your earned credentials and global recognitions.</p>
+    </div>
+    <div class="search" style="max-width:280px"><input placeholder="Search credentials…" /></div>
+  </div>
+
+  <div id="content"></div>
+</section>
+
+<script src="js/app.js"></script>
+<script>
+  const u = buildLayout("certificates.html");
+  const root = document.getElementById("content");
+
+  if(u.premium){
+    root.innerHTML = `
+      <div class="section-head"><h2>Badges earned</h2><span style="font-size:.82rem;color:var(--text-dim)">3 of 3</span></div>
+      <div class="cards cols-3" style="margin-bottom:2rem">
+        <div class="badge-card glass">
+          <div class="badge-medal">R</div>
+          <div class="nm">Routing Specialist</div>
+          <div class="ds">Mastered static, dynamic & OSPF routing.</div>
+        </div>
+        <div class="badge-card glass">
+          <div class="badge-medal cyan">S</div>
+          <div class="nm">Switching Expert</div>
+          <div class="ds">VLANs, trunking, STP and inter-VLAN.</div>
+        </div>
+        <div class="badge-card glass">
+          <div class="badge-medal green">S+</div>
+          <div class="nm">Network Security</div>
+          <div class="ds">ACLs, AAA, port security, hardening.</div>
+        </div>
+      </div>
+
+      <div class="section-head"><h2>Latest certificates</h2><a href="certificate-view.html">Open viewer</a></div>
+      <div class="cards cols-3">
+        <div class="cert-card glass">
+          <div class="cert-thumb"><div class="shine"></div><div class="seal">✓</div></div>
+          <div class="cert-body">
+            <div style="font-weight:700">CCNA Global Certification</div>
+            <div style="font-size:.78rem;color:var(--text-dim)">Issued by NetAcademy · MIT AOE Pune</div>
+            <div style="display:flex;gap:.4rem;margin-top:.4rem">
+              <a href="certificate-view.html" class="btn btn-primary" style="padding:.45rem .8rem;font-size:.78rem">View</a>
+              <a href="${u.certificate}" download class="btn btn-ghost" style="padding:.45rem .8rem;font-size:.78rem">Download</a>
+            </div>
+          </div>
+        </div>
+   
+     
+    `;
+  } else {
+    root.innerHTML = `
+      <div class="locked-overlay glass">
+        <div style="font-size:2.2rem">🔒</div>
+        <h2 style="margin-top:.4rem">Premium credentials are locked</h2>
+        <p style="color:var(--text-dim);max-width:520px;margin:.5rem auto 0">This certification is available only for enrolled premium learners. Enroll today to unlock all badges and the official CCNA Global Certificate.</p>
+        <div class="price-tag">$${COURSE.price} · One-time enrollment</div>
+        <div><button class="btn btn-primary" onclick="toast('Enrollment is invite-only. Contact your academy.','error')">Enroll now</button></div>
+      </div>
+      <div class="cards cols-3" style="margin-top:1.4rem">
+        <div class="badge-card glass blur"><div class="badge-medal">R</div><div class="nm">Routing Specialist</div></div>
+        <div class="badge-card glass blur"><div class="badge-medal cyan">S</div><div class="nm">Switching Expert</div></div>
+        <div class="badge-card glass blur"><div class="badge-medal green">S+</div><div class="nm">Network Security</div></div>
+      </div>
+    `;
+  }
+</script>
+</body>
+</html>

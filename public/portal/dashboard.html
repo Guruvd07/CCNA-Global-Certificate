@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dashboard · NetAcademy CCNA Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<section class="page" id="page">
+  <div class="page-head">
+    <div>
+      <div class="crumbs"><a href="dashboard.html">Home</a><span>/</span> Dashboard</div>
+      <h1 class="page-title">Welcome back, <span class="gradient-text" id="hello">Learner</span></h1>
+      <p class="page-sub" id="subline">Continue your CCNA Global Certification journey.</p>
+    </div>
+    <a href="course-details.html" class="btn btn-primary">Resume learning</a>
+  </div>
+
+  <div class="stats">
+    <div class="stat glass">
+      <div class="lbl">Course Progress</div>
+      <div class="val" id="s1">0%</div>
+      <div class="delta" id="s1d">+0 this week</div>
+      <div class="glyph"></div>
+    </div>
+    <div class="stat glass">
+      <div class="lbl">Modules Completed</div>
+      <div class="val" id="s2">0</div>
+      <div class="delta" id="s2d">of 24 weeks</div>
+      <div class="glyph"></div>
+    </div>
+    <div class="stat glass">
+      <div class="lbl">Badges Earned</div>
+      <div class="val" id="s3">0</div>
+      <div class="delta">Routing · Switching · Security</div>
+      <div class="glyph"></div>
+    </div>
+    <div class="stat glass">
+      <div class="lbl">Learning Hours</div>
+      <div class="val" id="s4">0</div>
+      <div class="delta" id="s4d">+4 this week</div>
+      <div class="glyph"></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="section-head"><h2>Continue learning</h2><a href="course-details.html">View all</a></div>
+      <div class="cards cols-2" id="courseCards"></div>
+
+      <div style="height:1.4rem"></div>
+      <div class="section-head"><h2>Recent activity</h2></div>
+      <div class="glass" style="padding:1.1rem 1.2rem">
+        <div id="activity" style="display:flex;flex-direction:column;gap:.85rem"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="glass" style="padding:1.4rem;display:flex;flex-direction:column;align-items:center;gap:.9rem">
+        <div class="ring" id="ring" style="--p:0"><div class="pct" id="ringPct">0%</div></div>
+        <div style="text-align:center">
+          <div style="font-weight:700">Certification readiness</div>
+          <div style="font-size:.82rem;color:var(--text-dim)" id="readiness">Keep going — you're getting there.</div>
+        </div>
+        <a href="certificates.html" class="btn btn-ghost btn-block">View certificates</a>
+      </div>
+
+      <div style="height:1rem"></div>
+
+      <div class="glass" style="padding:1.1rem 1.2rem">
+        <div class="section-head"><h2>Upcoming</h2></div>
+        <div style="display:flex;flex-direction:column;gap:.7rem;font-size:.88rem">
+          <div style="display:flex;justify-content:space-between"><span>Week 17 · Automation Basics</span><span class="chip">Due Mon</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Mock Assessment II</span><span class="chip gold">Wed</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Capstone Submission</span><span class="chip">Fri</span></div>
+        </div>
+      </div>
+
+      <div style="height:1rem"></div>
+
+      <div class="glass" style="padding:1.1rem 1.2rem">
+        <div class="section-head"><h2>Achievements</h2></div>
+        <div style="display:flex;gap:.6rem;justify-content:space-around">
+          <div style="text-align:center"><div class="badge-medal" style="width:54px;height:54px;font-size:.9rem">R</div><div style="font-size:.72rem;margin-top:.3rem">Routing</div></div>
+          <div style="text-align:center"><div class="badge-medal cyan" style="width:54px;height:54px;font-size:.9rem">S</div><div style="font-size:.72rem;margin-top:.3rem">Switching</div></div>
+          <div style="text-align:center"><div class="badge-medal green" style="width:54px;height:54px;font-size:.9rem">S+</div><div style="font-size:.72rem;margin-top:.3rem">Security</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="js/app.js"></script>
+<script>
+  const u = buildLayout("dashboard.html");
+  document.getElementById("hello").textContent = u.name.split(" ")[0];
+
+  const isPremium = u.premium;
+  const progress = isPremium ? 100 : 12;
+  const modules = isPremium ? 24 : 3;
+  const badges = isPremium ? 3 : 0;
+  const hours = isPremium ? 72 : 9;
+
+  setTimeout(()=>{
+    countUp(document.getElementById("s1"), progress); document.getElementById("s1").insertAdjacentHTML("beforeend","");
+    document.getElementById("s1").textContent = progress+"%";
+    countUp(document.getElementById("s2"), modules);
+    countUp(document.getElementById("s3"), badges);
+    countUp(document.getElementById("s4"), hours);
+    const ring = document.getElementById("ring");
+    let p = 0; const tgt = progress;
+    const iv = setInterval(()=>{ p+=2; if(p>=tgt){p=tgt;clearInterval(iv);} ring.style.setProperty("--p",p); document.getElementById("ringPct").textContent=p+"%"; },20);
+    if(isPremium){
+      document.getElementById("readiness").textContent = "Certification complete · ready to download.";
+      document.getElementById("s2d").textContent = "All 24 weeks completed";
+      document.getElementById("s1d").textContent = "Course completed";
+      setTimeout(confetti, 600);
+      toast("Welcome back — your CCNA certificate is ready 🎉","success");
+    } else {
+      toast("Some content is locked. Enroll to unlock the full CCNA program.","error");
+    }
+  }, 100);
+
+  // course cards
+  const cards = [
+    { tag:"CORE", title:"Switching & Routing Foundations", meta:"Weeks 1–8 · 24 hrs", p: isPremium?100:35 },
+    { tag:"ADV", title:"Enterprise Networking & Security", meta:"Weeks 9–18 · 32 hrs", p: isPremium?100:0 }
+  ];
+  document.getElementById("courseCards").innerHTML = cards.map(c=>`
+    <div class="course glass">
+      <div class="course-cover"><span class="tag">${c.tag}</span></div>
+      <div class="course-body">
+        <div class="course-title">${c.title}</div>
+        <div class="course-meta">${c.meta}</div>
+        <div class="progress ${c.p===100?'success':''}"><i style="width:${c.p}%"></i></div>
+        <div class="course-foot">
+          <span class="${c.p===100?'chip':'chip locked'}">${c.p===100?'Completed':c.p+'% complete'}</span>
+          <a href="course-details.html" class="btn btn-ghost" style="padding:.45rem .8rem;font-size:.8rem">Open</a>
+        </div>
+      </div>
+    </div>
+  `).join("");
+
+  // activity
+  const items = isPremium ? [
+    ["Completed", "Week 24 · Final Certification Project", "2h ago"],
+    ["Earned badge", "Network Security Specialist", "1d ago"],
+    ["Submitted", "Capstone Lab — Enterprise Network Design", "3d ago"]
+  ] : [
+    ["Started", "Week 1 · Networking Basics", "1h ago"],
+    ["Locked", "Premium content requires enrollment", "—"]
+  ];
+  document.getElementById("activity").innerHTML = items.map(i=>`
+    <div style="display:flex;justify-content:space-between;font-size:.9rem">
+      <span><strong style="color:var(--cyan)">${i[0]}</strong> · ${i[1]}</span>
+      <span style="color:var(--text-dim)">${i[2]}</span>
+    </div>
+  `).join("");
+</script>
+</body>
+</html>
