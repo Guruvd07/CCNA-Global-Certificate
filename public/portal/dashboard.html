@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Dashboard · NetAcademy CCNA Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="/portal/css/style.css" />
 </head>
 <body>
 <section class="page" id="page">
   <div class="page-head">
     <div>
-      <div class="crumbs"><a href="dashboard.html">Home</a><span>/</span> Dashboard</div>
+      <div class="crumbs"><a href="/portal/dashboard.html">Home</a><span>/</span> Dashboard</div>
       <h1 class="page-title">Welcome back, <span class="gradient-text" id="hello">Learner</span></h1>
       <p class="page-sub" id="subline">Continue your CCNA Global Certification journey.</p>
     </div>
-    <a href="course-details.html" class="btn btn-primary">Resume learning</a>
+    <a href="/portal/course-details.html" class="btn btn-primary"></a>Resume learning</a>
   </div>
 
   <div class="stats">
@@ -47,7 +47,7 @@
 
   <div class="grid-2">
     <div>
-      <div class="section-head"><h2>Continue learning</h2><a href="course-details.html">View all</a></div>
+      <div class="section-head"><h2>Continue learning</h2><a href="/portal/course-details.html">View all</a></div>
       <div class="cards cols-2" id="courseCards"></div>
 
       <div style="height:1.4rem"></div>
@@ -64,7 +64,7 @@
           <div style="font-weight:700">Certification readiness</div>
           <div style="font-size:.82rem;color:var(--text-dim)" id="readiness">Keep going — you're getting there.</div>
         </div>
-        <a href="certificates.html" class="btn btn-ghost btn-block">View certificates</a>
+        <a href="/portal/certificates.html" class="btn btn-ghost btn-block">View certificates</a>
       </div>
 
       <div style="height:1rem"></div>
@@ -92,7 +92,7 @@
   </div>
 </section>
 
-<script src="js/app.js"></script>
+<script src="/portal/js/script.js"></script>
 <script>
   const u = buildLayout("dashboard.html");
   document.getElementById("hello").textContent = u.name.split(" ")[0];
@@ -137,7 +137,7 @@
         <div class="progress ${c.p===100?'success':''}"><i style="width:${c.p}%"></i></div>
         <div class="course-foot">
           <span class="${c.p===100?'chip':'chip locked'}">${c.p===100?'Completed':c.p+'% complete'}</span>
-          <a href="course-details.html" class="btn btn-ghost" style="padding:.45rem .8rem;font-size:.8rem">Open</a>
+          <a href="/portal/course-details.html" class="btn btn-ghost" style="padding:.45rem .8rem;font-size:.8rem">Open</a>
         </div>
       </div>
     </div>

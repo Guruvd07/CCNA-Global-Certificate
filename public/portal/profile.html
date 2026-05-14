@@ -1,71 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8" />
+
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+
 <title>Profile · NetAcademy</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css" />
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+  rel="stylesheet"
+>
+
+<link rel="stylesheet" href="/portal/css/style.css" />
+
 </head>
+
 <body>
+
 <section class="page">
+
   <div class="page-head">
+
     <div>
-      <div class="crumbs"><a href="dashboard.html">Home</a><span>/</span> Profile</div>
-      <h1 class="page-title">Your profile</h1>
-      <p class="page-sub">Manage your learning identity and goals.</p>
+
+      <div class="crumbs">
+
+        <a href="/portal/dashboard.html">
+          Home
+        </a>
+
+        <span>/</span>
+
+        Profile
+
+      </div>
+
+      <h1 class="page-title">
+        Your profile
+      </h1>
+
+      <p class="page-sub">
+        Manage your learning identity and goals.
+      </p>
+
     </div>
+
   </div>
 
   <div class="profile-grid">
+
     <div class="profile-card glass-strong">
-      <div class="avatar-lg" id="avLg">--</div>
-      <div style="font-weight:700;font-size:1.15rem" id="pname">Name</div>
-      <div style="color:var(--text-dim);font-size:.88rem" id="pemail">email</div>
+
+      <div class="avatar-lg" id="avLg">
+        --
+      </div>
+
+      <div
+        style="font-weight:700;font-size:1.15rem"
+        id="pname">
+
+        Name
+
+      </div>
+
+      <div
+        style="color:var(--text-dim);font-size:.88rem"
+        id="pemail">
+
+        email
+
+      </div>
+
       <div style="margin:1rem 0">
-        <span class="chip" id="pTier">PREMIUM</span>
+
+        <span class="chip" id="pTier">
+          PREMIUM
+        </span>
+
       </div>
-      <a href="certificate-view.html" class="btn btn-primary btn-block">View certificate</a>
+
+      <a
+        href="/portal/certificate-view.html"
+        class="btn btn-primary btn-block">
+
+        View certificate
+
+      </a>
+
     </div>
+
     <div class="glass-strong" style="padding:1.6rem">
-      <h2 style="font-size:1.05rem;margin-bottom:1rem">Personal information</h2>
+
+      <h2 style="font-size:1.05rem;margin-bottom:1rem">
+        Personal information
+      </h2>
+
       <dl class="kv" id="kv"></dl>
-      <hr style="border:none;border-top:1px solid var(--border);margin:1.4rem 0">
-      <h2 style="font-size:1.05rem;margin-bottom:1rem">Learning statistics</h2>
+
+      <hr
+        style="border:none;border-top:1px solid var(--border);margin:1.4rem 0"
+      >
+
+      <h2 style="font-size:1.05rem;margin-bottom:1rem">
+        Learning statistics
+      </h2>
+
       <div class="stats" style="margin:0">
-        <div class="stat glass"><div class="lbl">Hours</div><div class="val" id="lh">0</div><div class="glyph"></div></div>
-        <div class="stat glass"><div class="lbl">Modules</div><div class="val" id="lm">0</div><div class="glyph"></div></div>
-        <div class="stat glass"><div class="lbl">Badges</div><div class="val" id="lb">0</div><div class="glyph"></div></div>
+
+        <div class="stat glass">
+
+          <div class="lbl">
+            Hours
+          </div>
+
+          <div class="val" id="lh">
+            0
+          </div>
+
+          <div class="glyph"></div>
+
+        </div>
+
+        <div class="stat glass">
+
+          <div class="lbl">
+            Modules
+          </div>
+
+          <div class="val" id="lm">
+            0
+          </div>
+
+          <div class="glyph"></div>
+
+        </div>
+
+        <div class="stat glass">
+
+          <div class="lbl">
+            Badges
+          </div>
+
+          <div class="val" id="lb">
+            0
+          </div>
+
+          <div class="glyph"></div>
+
+        </div>
+
       </div>
+
     </div>
+
   </div>
+
 </section>
 
-<script src="js/app.js"></script>
+<script src="/portal/js/script.js"></script>
+
 <script>
+
   const u = buildLayout("profile.html");
-  document.getElementById("avLg").textContent = u.initials;
-  document.getElementById("pname").textContent = u.name;
-  document.getElementById("pemail").textContent = u.email;
-  document.getElementById("pTier").textContent = u.premium?"PREMIUM ACCESS":"FREE TIER";
-  if(!u.premium){ document.getElementById("pTier").classList.add("locked"); }
+
+  document.getElementById("avLg").textContent =
+    u.initials;
+
+  document.getElementById("pname").textContent =
+    u.name;
+
+  document.getElementById("pemail").textContent =
+    u.email;
+
+  document.getElementById("pTier").textContent =
+    u.premium
+      ? "PREMIUM ACCESS"
+      : "FREE TIER";
+
+  if(!u.premium){
+
+    document
+      .getElementById("pTier")
+      .classList
+      .add("locked");
+
+  }
 
   document.getElementById("kv").innerHTML = `
-    <dt>Full name</dt><dd>${u.name}</dd>
-    <dt>Email</dt><dd>${u.email}</dd>
-    <dt>Country</dt><dd>${u.country||"—"}</dd>
-    <dt>Language</dt><dd>${u.language||"English"}</dd>
-    <dt>Career goal</dt><dd>${u.goal||"Set a learning goal"}</dd>
- 
-    
-    <dt>Member since</dt><dd>2026</dd>
+
+    <dt>Full name</dt>
+    <dd>${u.name}</dd>
+
+    <dt>Email</dt>
+    <dd>${u.email}</dd>
+
+    <dt>Country</dt>
+    <dd>${u.country || "—"}</dd>
+
+    <dt>Language</dt>
+    <dd>${u.language || "English"}</dd>
+
+    <dt>Career goal</dt>
+    <dd>${u.goal || "Set a learning goal"}</dd>
+
+    <dt>Member since</dt>
+    <dd>2026</dd>
+
   `;
+
   setTimeout(()=>{
-    countUp(document.getElementById("lh"), u.premium?72:9);
-    countUp(document.getElementById("lm"), u.premium?24:3);
-    countUp(document.getElementById("lb"), u.premium?3:0);
-    document.getElementById("ls").textContent = (u.premium?42:4)+"d";
+
+    countUp(
+      document.getElementById("lh"),
+      u.premium ? 72 : 9
+    );
+
+    countUp(
+      document.getElementById("lm"),
+      u.premium ? 24 : 3
+    );
+
+    countUp(
+      document.getElementById("lb"),
+      u.premium ? 3 : 0
+    );
+
   },80);
+
 </script>
+
 </body>
 </html>

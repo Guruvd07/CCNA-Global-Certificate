@@ -1,85 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8" />
+
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+
 <title>Sign in · NetAcademy CCNA Portal</title>
-<meta name="description" content="Cisco Certified Network Associate (CCNA) Global Certification portal — sign in to access your dashboard, badges and certificates." />
+
+<meta
+  name="description"
+  content="Cisco Certified Network Associate (CCNA) Global Certification portal — sign in to access your dashboard, badges and certificates."
+/>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css" />
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700&display=swap"
+  rel="stylesheet"
+>
+
+<link rel="stylesheet" href="/portal/css/style.css" />
+
 </head>
+
 <body>
+
 <main class="auth">
+
   <section class="auth-art">
+
     <div class="net"></div>
+
     <div class="blob"></div>
+
     <div class="blob b2"></div>
+
     <div class="brand" style="position:relative;z-index:1">
+
       <div class="brand-mark">N</div>
+
       <div>
-        <div class="brand-name">NetAcademy</div>
-        <div class="brand-sub">CCNA Global Certification</div>
+
+        <div class="brand-name">
+          NetAcademy
+        </div>
+
+        <div class="brand-sub">
+          CCNA Global Certification
+        </div>
+
       </div>
+
     </div>
-    <div class="auth-quote"> <br>
-      <h1>Engineer the networks that <span class="gradient-text">power tomorrow</span>.</h1> <br>
-      <p>Earn the globally-recognized Cisco Certified Network Associate certification — 70+ hours of hands-on training across switching, routing, wireless, security and enterprise networking.</p>
+
+    <div class="auth-quote">
+
+      <br>
+
+      <h1>
+
+        Engineer the networks that
+
+        <span class="gradient-text">
+          power tomorrow
+        </span>.
+
+      </h1>
+
+      <br>
+
+      <p>
+
+        Earn the globally-recognized Cisco Certified Network Associate certification —
+        70+ hours of hands-on training across switching, routing, wireless,
+        security and enterprise networking.
+
+      </p>
+
     </div>
+
     <div class="auth-stats">
-      <div class="auth-stat"><div class="v gradient-text">24</div><div class="l">Weeks</div></div>
-      <div class="auth-stat"><div class="v gradient-text">70+</div><div class="l">Hours</div></div>
-      <div class="auth-stat"><div class="v gradient-text">10</div><div class="l">Skill Tracks</div></div>
-      <div class="auth-stat"><div class="v gradient-text">Global</div><div class="l">Recognition</div></div>
+
+      <div class="auth-stat">
+
+        <div class="v gradient-text">24</div>
+
+        <div class="l">Weeks</div>
+
+      </div>
+
+      <div class="auth-stat">
+
+        <div class="v gradient-text">70+</div>
+
+        <div class="l">Hours</div>
+
+      </div>
+
+      <div class="auth-stat">
+
+        <div class="v gradient-text">10</div>
+
+        <div class="l">Skill Tracks</div>
+
+      </div>
+
+      <div class="auth-stat">
+
+        <div class="v gradient-text">Global</div>
+
+        <div class="l">Recognition</div>
+
+      </div>
+
     </div>
+
   </section>
 
   <section class="auth-form">
+
     <div class="auth-card glass-strong">
+
       <div class="brand">
+
         <div class="brand-mark">N</div>
+
         <div>
-          <div class="brand-name">NetAcademy</div>
-          <div class="brand-sub">Sign in to continue</div>
+
+          <div class="brand-name">
+            NetAcademy
+          </div>
+
+          <div class="brand-sub">
+            Sign in to continue
+          </div>
+
         </div>
+
       </div>
+
       <h2>Welcome back</h2>
-      <p class="sub">Enter your enrolled email to access your learning dashboard.</p>
+
+      <p class="sub">
+        Enter your enrolled email to access your learning dashboard.
+      </p>
+
       <div class="alert" id="alert"></div>
+
       <form id="loginForm" novalidate>
+
         <div class="field">
-          <label for="email">Email</label>
-          <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+
+          <label for="email">
+            Email
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            required
+          />
+
         </div>
+
         <button type="submit" class="btn btn-primary btn-block">
+
           Continue to dashboard
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+
+            <path d="M5 12h14"/>
+
+            <path d="m13 6 6 6-6 6"/>
+
+          </svg>
+
         </button>
+
       </form>
-      <!-- <div class="hint">Demo premium accounts: dhanrajkshirsagar302@gmail.com · vedant2727swami@gmail.com · aditya.dabhade@mitaoe.ac.in</div> -->
-      <div class="auth-foot">Protected by enterprise-grade access control</div>
+
+      <!--
+      <div class="hint">
+        Demo premium accounts:
+        dhanrajkshirsagar302@gmail.com ·
+        vedant2727swami@gmail.com ·
+        aditya.dabhade@mitaoe.ac.in
+      </div>
+      -->
+
+      <div class="auth-foot">
+        Protected by enterprise-grade access control
+      </div>
+
     </div>
+
   </section>
+
 </main>
 
-<script src="js/app.js"></script>
+<script src="/portal/js/script.js"></script>
+
 <script>
+
   mountParticles(28);
+
   const form = document.getElementById("loginForm");
+
   const alertEl = document.getElementById("alert");
+
   form.addEventListener("submit", e => {
+
     e.preventDefault();
-    const email = document.getElementById("email").value.trim();
-    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    if(!ok){ alertEl.textContent="Please enter a valid email address."; alertEl.classList.add("show"); return; }
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const ok =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    if(!ok){
+
+      alertEl.textContent =
+        "Please enter a valid email address.";
+
+      alertEl.classList.add("show");
+
+      return;
+
+    }
+
     Session.set(email);
-    document.querySelector(".auth-card").style.transform="scale(.98)";
-    document.querySelector(".auth-card").style.opacity=".7";
-    setTimeout(()=>window.location.href="dashboard.html", 350);
+
+    document.querySelector(".auth-card").style.transform =
+      "scale(.98)";
+
+    document.querySelector(".auth-card").style.opacity =
+      ".7";
+
+    setTimeout(()=>{
+
+      window.location.href =
+        "/portal/dashboard.html";
+
+    }, 350);
+
   });
+
   // auto-redirect if already logged in
-  if(Session.get()) window.location.replace("dashboard.html");
+
+  if(Session.get()){
+
+    window.location.replace(
+      "/portal/dashboard.html"
+    );
+
+  }
+
 </script>
+
 </body>
 </html>

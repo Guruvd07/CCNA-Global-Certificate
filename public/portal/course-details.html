@@ -1,98 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8" />
+
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+
 <title>Course Details · NetAcademy CCNA</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css" />
+
+<link rel="stylesheet" href="/portal/css/style.css" />
+
 </head>
+
 <body>
+
 <section class="page">
+
   <div class="page-head">
+
     <div>
-      <div class="crumbs"><a href="dashboard.html">Home</a><span>/</span><a href="course-details.html"> My Learning</a><span>/</span> Course</div>
-      <h1 class="page-title" id="ctitle">CCNA Global Certification</h1>
+
+      <div class="crumbs">
+
+        <a href="/portal/dashboard.html">Home</a>
+
+        <span>/</span>
+
+        <a href="/portal/course-details.html">
+          My Learning
+        </a>
+
+        <span>/</span>
+
+        Course
+
+      </div>
+
+      <h1 class="page-title" id="ctitle">
+        CCNA Global Certification
+      </h1>
+
       <p class="page-sub" id="csub"></p>
+
     </div>
+
     <div id="ctaWrap"></div>
+
   </div>
 
   <div class="grid-2">
+
     <div>
+
       <div class="glass-strong" style="padding:1.4rem;margin-bottom:1.2rem">
-        <h2 style="font-size:1.05rem;margin-bottom:.6rem">About this certification</h2>
-        <p style="color:var(--text-dim);font-size:.95rem">The CCNA Global Certification is a comprehensive program covering enterprise networking from the ground up. You'll master switching, routing, wireless, security, and automation through hands-on labs in Cisco Packet Tracer.</p>
+
+        <h2 style="font-size:1.05rem;margin-bottom:.6rem">
+          About this certification
+        </h2>
+
+        <p style="color:var(--text-dim);font-size:.95rem">
+
+          The CCNA Global Certification is a comprehensive program covering enterprise networking from the ground up.
+
+          You'll master switching, routing, wireless, security, and automation through hands-on labs in Cisco Packet Tracer.
+
+        </p>
+
         <div class="skill-list" id="skillList" style="margin-top:1rem"></div>
+
       </div>
 
-      <div class="section-head"><h2>Weekly syllabus</h2><span style="font-size:.82rem;color:var(--text-dim)" id="progLabel"></span></div>
+      <div class="section-head">
+
+        <h2>Weekly syllabus</h2>
+
+        <span
+          style="font-size:.82rem;color:var(--text-dim)"
+          id="progLabel">
+        </span>
+
+      </div>
+
       <div class="syllabus" id="syllabus"></div>
+
     </div>
 
     <div>
+
       <div class="glass-strong" style="padding:1.4rem">
-        <h2 style="font-size:1.05rem;margin-bottom:.8rem">Course information</h2>
+
+        <h2 style="font-size:1.05rem;margin-bottom:.8rem">
+          Course information
+        </h2>
+
         <dl class="kv">
-          <dt>Academy</dt><dd>MIT Academy of Engineering, Alandi Pune</dd>
-          <dt>Instructor</dt><dd>Sandeep Shiravale</dd>
-          <dt>Duration</dt><dd>18 – 24 Weeks</dd>
-          <dt>Total hours</dt><dd>70+ Hours</dd>
-          <dt>Level</dt><dd>Associate</dd>
-          <dt>Language</dt><dd>English</dd>
+
+          <dt>Academy</dt>
+          <dd>MIT Academy of Engineering, Alandi Pune</dd>
+
+          <dt>Instructor</dt>
+          <dd>Sandeep Shiravale</dd>
+
+          <dt>Duration</dt>
+          <dd>18 – 24 Weeks</dd>
+
+          <dt>Total hours</dt>
+          <dd>70+ Hours</dd>
+
+          <dt>Level</dt>
+          <dd>Associate</dd>
+
+          <dt>Language</dt>
+          <dd>English</dd>
+
         </dl>
+
       </div>
+
       <div style="height:1rem"></div>
-      <div class="glass-strong" style="padding:1.4rem;display:flex;flex-direction:column;align-items:center;gap:.8rem">
-        <div class="ring" id="ring2" style="--p:0"><div class="pct" id="ringPct2">0%</div></div>
-        <div style="text-align:center;font-size:.85rem;color:var(--text-dim)" id="completionMsg">Track your completion progress.</div>
+
+      <div
+        class="glass-strong"
+        style="padding:1.4rem;display:flex;flex-direction:column;align-items:center;gap:.8rem">
+
+        <div class="ring" id="ring2" style="--p:0">
+
+          <div class="pct" id="ringPct2">
+            0%
+          </div>
+
+        </div>
+
+        <div
+          style="text-align:center;font-size:.85rem;color:var(--text-dim)"
+          id="completionMsg">
+
+          Track your completion progress.
+
+        </div>
+
       </div>
+
     </div>
+
   </div>
+
 </section>
 
-<script src="js/app.js"></script>
+<script src="/portal/js/script.js"></script>
+
 <script>
+
   const u = buildLayout("course-details.html");
+
   document.getElementById("ctitle").textContent = COURSE.title;
-  document.getElementById("csub").textContent = `${COURSE.short} · ${COURSE.duration} · ${COURSE.hours}`;
-  document.getElementById("skillList").innerHTML = COURSE.skills.map(s=>`<span>${s}</span>`).join("");
+
+  document.getElementById("csub").textContent =
+    `${COURSE.short} · ${COURSE.duration} · ${COURSE.hours}`;
+
+  document.getElementById("skillList").innerHTML =
+    COURSE.skills.map(s => `<span>${s}</span>`).join("");
 
   const completedAll = u.premium;
-  const completedCount = completedAll ? COURSE.weeks.length : 3;
-  const pct = Math.round(completedCount / COURSE.weeks.length * 100);
-  document.getElementById("progLabel").textContent = `${completedCount} of ${COURSE.weeks.length} weeks · ${pct}%`;
 
-  document.getElementById("syllabus").innerHTML = COURSE.weeks.map((w,i)=>{
-    const done = i < completedCount;
-    const locked = !u.premium && i >= 3;
-    const chip = done ? `<span class="chip">Completed</span>` : locked ? `<span class="chip locked">Locked</span>` : `<span class="chip gold">In progress</span>`;
-    return `<div class="week">
-      <div class="num">W${w.n}</div>
-      <div>
-        <div class="nm">${w.name}</div>
-        <div class="topics">${w.topics}</div>
-      </div>
-      ${chip}
-    </div>`;
-  }).join("");
+  const completedCount =
+    completedAll ? COURSE.weeks.length : 3;
+
+  const pct =
+    Math.round(completedCount / COURSE.weeks.length * 100);
+
+  document.getElementById("progLabel").textContent =
+    `${completedCount} of ${COURSE.weeks.length} weeks · ${pct}%`;
+
+  document.getElementById("syllabus").innerHTML =
+    COURSE.weeks.map((w,i)=>{
+
+      const done = i < completedCount;
+
+      const locked =
+        !u.premium && i >= 3;
+
+      const chip =
+        done
+          ? `<span class="chip">Completed</span>`
+          : locked
+            ? `<span class="chip locked">Locked</span>`
+            : `<span class="chip gold">In progress</span>`;
+
+      return `
+        <div class="week">
+
+          <div class="num">
+            W${w.n}
+          </div>
+
+          <div>
+
+            <div class="nm">
+              ${w.name}
+            </div>
+
+            <div class="topics">
+              ${w.topics}
+            </div>
+
+          </div>
+
+          ${chip}
+
+        </div>
+      `;
+
+    }).join("");
 
   // CTA
+
   const cta = document.getElementById("ctaWrap");
+
   if(u.premium){
-    cta.innerHTML = `<a href="certificate-view.html" class="btn btn-success">View certificate</a>`;
-    document.getElementById("completionMsg").textContent = "All modules complete · certified.";
+
+    cta.innerHTML = `
+      <a
+        href="/portal/certificate-view.html"
+        class="btn btn-success">
+
+        View certificate
+
+      </a>
+    `;
+
+    document.getElementById("completionMsg").textContent =
+      "All modules complete · certified.";
+
   } else {
-    cta.innerHTML = `<button class="btn btn-primary" id="enroll">Enroll · $${COURSE.price}</button>`;
-    document.getElementById("completionMsg").textContent = "Enroll to unlock the full curriculum.";
-    document.getElementById("enroll").addEventListener("click",()=>toast("Enrollment is currently invite-only. Contact your academy.","error"));
+
+    cta.innerHTML = `
+      <button class="btn btn-primary" id="enroll">
+
+        Enroll · $${COURSE.price}
+
+      </button>
+    `;
+
+    document.getElementById("completionMsg").textContent =
+      "Enroll to unlock the full curriculum.";
+
+    document
+      .getElementById("enroll")
+      .addEventListener("click",()=>{
+
+        toast(
+          "Enrollment is currently invite-only. Contact your academy.",
+          "error"
+        );
+
+      });
+
   }
 
   setTimeout(()=>{
-    let p=0; const tgt=pct;
-    const r=document.getElementById("ring2");
-    const iv=setInterval(()=>{p+=2;if(p>=tgt){p=tgt;clearInterval(iv);}r.style.setProperty("--p",p);document.getElementById("ringPct2").textContent=p+"%";},20);
+
+    let p = 0;
+
+    const tgt = pct;
+
+    const r = document.getElementById("ring2");
+
+    const iv = setInterval(()=>{
+
+      p += 2;
+
+      if(p >= tgt){
+
+        p = tgt;
+
+        clearInterval(iv);
+
+      }
+
+      r.style.setProperty("--p", p);
+
+      document.getElementById("ringPct2").textContent =
+        p + "%";
+
+    },20);
+
   },120);
+
 </script>
+
 </body>
 </html>
