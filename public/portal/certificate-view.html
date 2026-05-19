@@ -98,38 +98,24 @@
 
         <div class="viewer-actions">
 
-          
-            href="${u.certificate}"
-            download
-            class="btn btn-success"
-            id="dlBtn">
-
-            Download Certificate (PDF)
-
-          </a>
+          <div id="dlBtnContainer"></div>
 
           <button
             class="btn btn-ghost"
-            onclick="window.open('${u.certificate}','_blank')">
-
+            id="openCertBtn">
             Open in new tab
-
           </button>
 
           <button
             class="btn btn-ghost"
             id="printBtn">
-
             Print
-
           </button>
 
           <button
             class="btn btn-ghost"
             onclick="navigator.clipboard.writeText(window.location.href);toast('Verification link copied','success')">
-
             Copy verify link
-
           </button>
 
         </div>
@@ -145,35 +131,23 @@
 
           <div class="viewer-actions">
 
-            
-              href="${marksheetPath}"
-              download
-              class="btn btn-success"
-              id="dlMarksheet">
-
-              Download Mark Sheet (PDF)
-
-            </a>
+            <div id="dlMarksheetContainer"></div>
 
             <button
               class="btn btn-ghost"
-              onclick="window.open('${marksheetPath}','_blank')">
-
+              id="openMarksheetBtn">
               Open Mark Sheet
-
             </button>
 
             <button
               class="btn btn-ghost"
               id="printMarksheetBtn">
-
               Print Mark Sheet
-
             </button>
 
           </div>
 
-          <div class="viewer-frame" style="margin-top:1rem" id="marksheetFrame">
+          <div class="viewer-frame" style="margin-top:1rem">
 
             <iframe
               id="marksheetPdfFrame"
@@ -248,32 +222,62 @@
 
     `;
 
-    // ── Certificate print ──
-    document.getElementById("printBtn").addEventListener("click",()=>{
-      const w = window.open(u.certificate, "_blank");
-      if(w){ setTimeout(()=>w.print(), 800); }
-    });
+    // ── Certificate download button (built via DOM to avoid template literal issues) ──
+    const dlBtn = document.createElement("a");
+    dlBtn.href = u.certificate;
+    dlBtn.download = "";
+    dlBtn.className = "btn btn-success";
+    dlBtn.id = "dlBtn";
+    dlBtn.textContent = "Download Certificate (PDF)";
+    document.getElementById("dlBtnContainer").appendChild(dlBtn);
 
-    // ── Certificate download confetti ──
-    document.getElementById("dlBtn").addEventListener("click",()=>{
-      toast("Downloading your certificate…","success");
+    dlBtn.addEventListener("click", () => {
+      toast("Downloading your certificate…", "success");
       setTimeout(confetti, 300);
     });
 
-    // ── Marksheet print ──
+    // ── Certificate open in new tab ──
+    document.getElementById("openCertBtn").addEventListener("click", () => {
+      window.open(u.certificate, "_blank");
+    });
+
+    // ── Certificate print ──
+    document.getElementById("printBtn").addEventListener("click", () => {
+      const w = window.open(u.certificate, "_blank");
+      if(w){ setTimeout(() => w.print(), 800); }
+    });
+
+    // ── Marksheet buttons (only if marksheet exists for this user) ──
     if(marksheetPath){
-      document.getElementById("printMarksheetBtn").addEventListener("click",()=>{
-        const w = window.open(marksheetPath, "_blank");
-        if(w){ setTimeout(()=>w.print(), 800); }
+
+      // Download button built via DOM
+      const dlMs = document.createElement("a");
+      dlMs.href = marksheetPath;
+      dlMs.download = "";
+      dlMs.className = "btn btn-success";
+      dlMs.id = "dlMarksheet";
+      dlMs.textContent = "Download Mark Sheet (PDF)";
+      document.getElementById("dlMarksheetContainer").appendChild(dlMs);
+
+      dlMs.addEventListener("click", () => {
+        toast("Downloading your mark sheet…", "success");
       });
 
-      document.getElementById("dlMarksheet").addEventListener("click",()=>{
-        toast("Downloading your mark sheet…","success");
+      // Open marksheet in new tab
+      document.getElementById("openMarksheetBtn").addEventListener("click", () => {
+        window.open(marksheetPath, "_blank");
       });
+
+      // Print marksheet
+      document.getElementById("printMarksheetBtn").addEventListener("click", () => {
+        const w = window.open(marksheetPath, "_blank");
+        if(w){ setTimeout(() => w.print(), 800); }
+      });
+
     }
 
-    // graceful fallback if PDF missing
-    setTimeout(()=>{
+    // ── Graceful fallback if certificate PDF missing ──
+    setTimeout(() => {
       const f = document.getElementById("pdfFrame");
       try {
         if(
