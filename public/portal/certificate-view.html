@@ -20,6 +20,18 @@
   const u = buildLayout("certificate-view.html");
   const v = document.getElementById("viewer");
 
+  // ── Marksheet map: email → PDF filename inside /portal/marksheet/ ──
+  const MARKSHEET_MAP = {
+    "vedant2727swami@gmail.com":      "Vedant Swami Cisco Certified Network Associate.pdf",
+    "dhanrajkshirsagar302@gmail.com": "Dhanraj Kshirsagar Cisco Certified Network Associate.pdf",
+    "aditya.dabhade@mitaoe.ac.in":    "Aditya Dabhade Cisco Certified Network Associate.pdf"
+  };
+
+  const marksheetFile = MARKSHEET_MAP[u.email] || null;
+  const marksheetPath = marksheetFile
+    ? `/portal/marksheet/${encodeURIComponent(marksheetFile)}`
+    : null;
+
   if(!u.premium){
 
     v.innerHTML = `
@@ -86,7 +98,7 @@
 
         <div class="viewer-actions">
 
-          <a
+          
             href="${u.certificate}"
             download
             class="btn btn-success"
@@ -121,6 +133,60 @@
           </button>
 
         </div>
+
+        ${marksheetPath ? `
+
+        <!-- ── Marksheet Section ── -->
+        <div style="margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--border)">
+
+          <div style="font-size:.78rem;letter-spacing:.18em;color:var(--text-dim);text-transform:uppercase;margin-bottom:.6rem">
+            Mark Sheet
+          </div>
+
+          <div class="viewer-actions">
+
+            
+              href="${marksheetPath}"
+              download
+              class="btn btn-success"
+              id="dlMarksheet">
+
+              Download Mark Sheet (PDF)
+
+            </a>
+
+            <button
+              class="btn btn-ghost"
+              onclick="window.open('${marksheetPath}','_blank')">
+
+              Open Mark Sheet
+
+            </button>
+
+            <button
+              class="btn btn-ghost"
+              id="printMarksheetBtn">
+
+              Print Mark Sheet
+
+            </button>
+
+          </div>
+
+          <div class="viewer-frame" style="margin-top:1rem" id="marksheetFrame">
+
+            <iframe
+              id="marksheetPdfFrame"
+              src="${marksheetPath}#toolbar=0&navpanes=0"
+              title="Mark Sheet"
+              onerror="this.style.display='none'">
+            </iframe>
+
+          </div>
+
+        </div>
+
+        ` : ""}
 
       </div>
 
@@ -182,44 +248,41 @@
 
     `;
 
+    // ── Certificate print ──
     document.getElementById("printBtn").addEventListener("click",()=>{
-
       const w = window.open(u.certificate, "_blank");
-
-      if(w){
-        setTimeout(()=>w.print(), 800);
-      }
-
+      if(w){ setTimeout(()=>w.print(), 800); }
     });
 
+    // ── Certificate download confetti ──
     document.getElementById("dlBtn").addEventListener("click",()=>{
-
       toast("Downloading your certificate…","success");
-
       setTimeout(confetti, 300);
-
     });
+
+    // ── Marksheet print ──
+    if(marksheetPath){
+      document.getElementById("printMarksheetBtn").addEventListener("click",()=>{
+        const w = window.open(marksheetPath, "_blank");
+        if(w){ setTimeout(()=>w.print(), 800); }
+      });
+
+      document.getElementById("dlMarksheet").addEventListener("click",()=>{
+        toast("Downloading your mark sheet…","success");
+      });
+    }
 
     // graceful fallback if PDF missing
-
     setTimeout(()=>{
-
       const f = document.getElementById("pdfFrame");
-
       try {
-
         if(
           !f.contentDocument ||
-          (
-            f.contentDocument.body &&
-            f.contentDocument.body.innerHTML === ""
-          )
+          (f.contentDocument.body && f.contentDocument.body.innerHTML === "")
         ){
           // fallback placeholder
         }
-
       } catch(e){}
-
     }, 1500);
 
   }
