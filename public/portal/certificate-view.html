@@ -8,9 +8,144 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="/portal/css/style.css" />
+
+<style>
+  /* ── Verification Modal ── */
+  .verify-modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+  .verify-modal-backdrop.open {
+    display: flex;
+  }
+  .verify-modal {
+    background: var(--surface, #1a1f2e);
+    border: 1px solid var(--border, #2a3045);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 520px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  }
+  .verify-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-dim, #8892aa);
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .verify-modal h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: .3rem;
+  }
+  .verify-modal p {
+    font-size: .85rem;
+    color: var(--text-dim, #8892aa);
+    margin-bottom: 1.2rem;
+  }
+  .verify-input-row {
+    display: flex;
+    gap: .6rem;
+    margin-bottom: .6rem;
+  }
+  .verify-input-row input {
+    flex: 1;
+    padding: .6rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border, #2a3045);
+    background: var(--surface2, #0f1320);
+    color: var(--text, #e2e8f0);
+    font-size: .95rem;
+    font-family: inherit;
+    outline: none;
+  }
+  .verify-input-row input:focus {
+    border-color: var(--accent, #4f8ef7);
+  }
+  .verify-error {
+    font-size: .82rem;
+    color: #f87171;
+    min-height: 1.1rem;
+    margin-bottom: .8rem;
+  }
+  .verify-img-wrap {
+    display: none;
+    margin-top: 1rem;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border, #2a3045);
+  }
+  .verify-img-wrap.show {
+    display: block;
+  }
+  .verify-img-wrap img {
+    width: 100%;
+    display: block;
+  }
+  .cisco-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    font-size: .75rem;
+    color: #049fd9;
+    font-weight: 600;
+    letter-spacing: .04em;
+    margin-bottom: 1rem;
+  }
+  .cisco-badge svg {
+    width: 18px;
+    height: 18px;
+  }
+</style>
 </head>
 
 <body>
+
+<!-- ── Verification Modal ── -->
+<div class="verify-modal-backdrop" id="verifyModalBackdrop">
+  <div class="verify-modal">
+    <button class="verify-modal-close" id="verifyModalClose">×</button>
+
+    <div class="cisco-badge">
+      <svg viewBox="0 0 24 24" fill="#049fd9"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      Cisco Credential Verification
+    </div>
+
+    <h3>Enter your Cisco ID to verify</h3>
+    <p>This credential is password-protected. Enter the Cisco ID No. printed on the certificate to view verification details.</p>
+
+    <div class="verify-input-row">
+      <input
+        type="text"
+        id="verifyPasswordInput"
+        placeholder="e.g. CSCO12652318"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="btn btn-primary" id="verifySubmitBtn" style="white-space:nowrap">
+        Verify
+      </button>
+    </div>
+
+    <div class="verify-error" id="verifyError"></div>
+
+    <div class="verify-img-wrap" id="verifyImgWrap">
+      <img id="verifyImg" src="" alt="Cisco Credential Verification" />
+    </div>
+
+  </div>
+</div>
 
 <section class="viewer" id="viewer"></section>
 
@@ -20,17 +155,100 @@
   const u = buildLayout("certificate-view.html");
   const v = document.getElementById("viewer");
 
-  // ── Marksheet map: email → PDF filename inside /portal/marksheet/ ──
+  // ── Marksheet map ──
   const MARKSHEET_MAP = {
     "vedant2727swami@gmail.com":      "Vedant Swami Cisco Certified Network Associate.pdf",
     "dhanrajkshirsagar302@gmail.com": "Dhanraj Kshirsagar Cisco Certified Network Associate.pdf",
     "aditya.dabhade@mitaoe.ac.in":    "Aditya Dabhade Cisco Certified Network Associate.pdf"
   };
 
+  // ── Cisco ID + verification image map ──
+  const VERIFY_MAP = {
+    "dhanrajkshirsagar302@gmail.com": {
+      ciscoId: "CSCO12652318",
+      image:   "/portal/verify/dhanraj-verify.jpg"
+    },
+    "aditya.dabhade@mitaoe.ac.in": {
+      ciscoId: "CSCO37506420",
+      image:   "/portal/verify/aditya-verify.jpg"
+    },
+    "vedant2727swami@gmail.com": {
+      ciscoId: "CSCO72276575",
+      image:   "/portal/verify/vedant-verify.jpg"
+    }
+  };
+
   const marksheetFile = MARKSHEET_MAP[u.email] || null;
   const marksheetPath = marksheetFile
     ? `/portal/marksheet/${encodeURIComponent(marksheetFile)}`
     : null;
+
+  const verifyData = VERIFY_MAP[u.email] || null;
+
+  // ── Modal logic ──
+  const backdrop    = document.getElementById("verifyModalBackdrop");
+  const closeBtn    = document.getElementById("verifyModalClose");
+  const input       = document.getElementById("verifyPasswordInput");
+  const submitBtn   = document.getElementById("verifySubmitBtn");
+  const errorEl     = document.getElementById("verifyError");
+  const imgWrap     = document.getElementById("verifyImgWrap");
+  const verifyImg   = document.getElementById("verifyImg");
+
+  function openVerifyModal() {
+    // Reset state each time
+    input.value = "";
+    errorEl.textContent = "";
+    imgWrap.classList.remove("show");
+    verifyImg.src = "";
+    backdrop.classList.add("open");
+    setTimeout(() => input.focus(), 100);
+  }
+
+  function closeVerifyModal() {
+    backdrop.classList.remove("open");
+  }
+
+  function handleVerify() {
+    const entered = input.value.trim().toUpperCase();
+    if(!verifyData){
+      errorEl.textContent = "No verification data found for your account.";
+      return;
+    }
+    if(entered === verifyData.ciscoId.toUpperCase()){
+      errorEl.textContent = "";
+      verifyImg.src = verifyData.image;
+      imgWrap.classList.add("show");
+    } else {
+      errorEl.textContent = "Incorrect Cisco ID. Please check your certificate and try again.";
+      imgWrap.classList.remove("show");
+    }
+  }
+
+  closeBtn.addEventListener("click", closeVerifyModal);
+  backdrop.addEventListener("click", (e) => {
+    if(e.target === backdrop) closeVerifyModal();
+  });
+  submitBtn.addEventListener("click", handleVerify);
+  input.addEventListener("keydown", (e) => {
+    if(e.key === "Enter") handleVerify();
+  });
+
+  // ── Intercept clicks inside the certificate iframe ──
+  function hookIframeLinks() {
+    try {
+      const iframe = document.getElementById("pdfFrame");
+      if(!iframe || !iframe.contentDocument) return;
+      iframe.contentDocument.addEventListener("click", (e) => {
+        const a = e.target.closest("a");
+        if(a && a.href && a.href.includes("verifycertificate")){
+          e.preventDefault();
+          openVerifyModal();
+        }
+      });
+    } catch(err){
+      // cross-origin PDF — use overlay method below
+    }
+  }
 
   if(!u.premium){
 
@@ -85,7 +303,7 @@
 
         </div>
 
-        <div class="viewer-frame" id="frame">
+        <div class="viewer-frame" id="frame" style="position:relative">
 
           <iframe
             id="pdfFrame"
@@ -94,24 +312,25 @@
             onerror="this.style.display='none'">
           </iframe>
 
+          <!-- Transparent overlay to catch clicks on the verify link area in the PDF -->
+          <div id="verifyLinkOverlay" style="
+            position:absolute;
+            bottom:3.8%;
+            left:2%;
+            width:28%;
+            height:5%;
+            cursor:pointer;
+            z-index:10;
+          " title="Verify this credential"></div>
+
         </div>
 
         <div class="viewer-actions">
 
           <div id="dlBtnContainer"></div>
 
-          <button
-            class="btn btn-ghost"
-            id="openCertBtn">
-            Open in new tab
-          </button>
-
-          <button
-            class="btn btn-ghost"
-            id="printBtn">
-            Print
-          </button>
-
+          <button class="btn btn-ghost" id="openCertBtn">Open in new tab</button>
+          <button class="btn btn-ghost" id="printBtn">Print</button>
           <button
             class="btn btn-ghost"
             onclick="navigator.clipboard.writeText(window.location.href);toast('Verification link copied','success')">
@@ -122,7 +341,6 @@
 
         ${marksheetPath ? `
 
-        <!-- ── Marksheet Section ── -->
         <div style="margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--border)">
 
           <div style="font-size:.78rem;letter-spacing:.18em;color:var(--text-dim);text-transform:uppercase;margin-bottom:.6rem">
@@ -130,32 +348,18 @@
           </div>
 
           <div class="viewer-actions">
-
             <div id="dlMarksheetContainer"></div>
-
-            <button
-              class="btn btn-ghost"
-              id="openMarksheetBtn">
-              Open Mark Sheet
-            </button>
-
-            <button
-              class="btn btn-ghost"
-              id="printMarksheetBtn">
-              Print Mark Sheet
-            </button>
-
+            <button class="btn btn-ghost" id="openMarksheetBtn">Open Mark Sheet</button>
+            <button class="btn btn-ghost" id="printMarksheetBtn">Print Mark Sheet</button>
           </div>
 
           <div class="viewer-frame" style="margin-top:1rem">
-
             <iframe
               id="marksheetPdfFrame"
               src="${marksheetPath}#toolbar=0&navpanes=0"
               title="Mark Sheet"
               onerror="this.style.display='none'">
             </iframe>
-
           </div>
 
         </div>
@@ -166,53 +370,23 @@
 
       <aside class="viewer-side glass-strong">
 
-        <h2 style="font-size:1.05rem;margin-bottom:.4rem">
-          Credential details
-        </h2>
+        <h2 style="font-size:1.05rem;margin-bottom:.4rem">Credential details</h2>
 
         <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:1rem">
           This certificate verifies completion of the CCNA Global Certification program.
         </p>
 
         <dl class="kv">
-
-          <dt>Recipient</dt>
-          <dd>${u.name}</dd>
-
-          <dt>Email</dt>
-          <dd style="word-break:break-all">${u.email}</dd>
-
-          <dt>Course</dt>
-          <dd>${COURSE.title}</dd>
-
-          <!--
-          <dt>Academy</dt>
-          <dd>${COURSE.academy}</dd>
-
-          <dt>Instructor</dt>
-          <dd>${COURSE.instructor}</dd>
-          -->
-
-          <dt>Duration</dt>
-          <dd>${COURSE.duration}</dd>
-
-          <dt>Hours</dt>
-          <dd>${COURSE.hours}</dd>
-
+          <dt>Recipient</dt><dd>${u.name}</dd>
+          <dt>Email</dt><dd style="word-break:break-all">${u.email}</dd>
+          <dt>Course</dt><dd>${COURSE.title}</dd>
+          <dt>Duration</dt><dd>${COURSE.duration}</dd>
+          <dt>Hours</dt><dd>${COURSE.hours}</dd>
           <dt>Issued</dt>
-          <dd>
-            ${new Date().toLocaleDateString(undefined,{
-              year:'numeric',
-              month:'long',
-              day:'numeric'
-            })}
-          </dd>
-
+          <dd>${new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})}</dd>
         </dl>
 
-        <h3 style="font-size:.92rem;margin-top:1rem">
-          Skills validated
-        </h3>
+        <h3 style="font-size:.92rem;margin-top:1rem">Skills validated</h3>
 
         <div class="skill-list">
           ${COURSE.skills.map(s=>`<span>${s}</span>`).join("")}
@@ -222,70 +396,52 @@
 
     `;
 
-    // ── Certificate download button (built via DOM to avoid template literal issues) ──
+    // ── Certificate download button ──
     const dlBtn = document.createElement("a");
     dlBtn.href = u.certificate;
     dlBtn.download = "";
     dlBtn.className = "btn btn-success";
-    dlBtn.id = "dlBtn";
     dlBtn.textContent = "Download Certificate (PDF)";
     document.getElementById("dlBtnContainer").appendChild(dlBtn);
-
     dlBtn.addEventListener("click", () => {
       toast("Downloading your certificate…", "success");
       setTimeout(confetti, 300);
     });
 
-    // ── Certificate open in new tab ──
-    document.getElementById("openCertBtn").addEventListener("click", () => {
-      window.open(u.certificate, "_blank");
-    });
-
-    // ── Certificate print ──
+    document.getElementById("openCertBtn").addEventListener("click", () => window.open(u.certificate, "_blank"));
     document.getElementById("printBtn").addEventListener("click", () => {
       const w = window.open(u.certificate, "_blank");
-      if(w){ setTimeout(() => w.print(), 800); }
+      if(w) setTimeout(() => w.print(), 800);
     });
 
-    // ── Marksheet buttons (only if marksheet exists for this user) ──
-    if(marksheetPath){
+    // ── Verify link overlay click ──
+    document.getElementById("verifyLinkOverlay").addEventListener("click", openVerifyModal);
 
-      // Download button built via DOM
+    // ── Hook iframe links after load (same-origin PDFs) ──
+    document.getElementById("pdfFrame").addEventListener("load", hookIframeLinks);
+
+    // ── Marksheet buttons ──
+    if(marksheetPath){
       const dlMs = document.createElement("a");
       dlMs.href = marksheetPath;
       dlMs.download = "";
       dlMs.className = "btn btn-success";
-      dlMs.id = "dlMarksheet";
       dlMs.textContent = "Download Mark Sheet (PDF)";
       document.getElementById("dlMarksheetContainer").appendChild(dlMs);
+      dlMs.addEventListener("click", () => toast("Downloading your mark sheet…", "success"));
 
-      dlMs.addEventListener("click", () => {
-        toast("Downloading your mark sheet…", "success");
-      });
-
-      // Open marksheet in new tab
-      document.getElementById("openMarksheetBtn").addEventListener("click", () => {
-        window.open(marksheetPath, "_blank");
-      });
-
-      // Print marksheet
+      document.getElementById("openMarksheetBtn").addEventListener("click", () => window.open(marksheetPath, "_blank"));
       document.getElementById("printMarksheetBtn").addEventListener("click", () => {
         const w = window.open(marksheetPath, "_blank");
-        if(w){ setTimeout(() => w.print(), 800); }
+        if(w) setTimeout(() => w.print(), 800);
       });
-
     }
 
-    // ── Graceful fallback if certificate PDF missing ──
+    // ── Graceful fallback ──
     setTimeout(() => {
       const f = document.getElementById("pdfFrame");
       try {
-        if(
-          !f.contentDocument ||
-          (f.contentDocument.body && f.contentDocument.body.innerHTML === "")
-        ){
-          // fallback placeholder
-        }
+        if(!f.contentDocument || (f.contentDocument.body && f.contentDocument.body.innerHTML === "")){}
       } catch(e){}
     }, 1500);
 
